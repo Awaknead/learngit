@@ -20,11 +20,11 @@ void game (void)
     system("cls");
     // 布置雷
     setmine(mine,ROW,COL);
-    displayboard(mine,ROW,COL);
+    displayboard(mine,ROW,COL);//用户看不见的
     // 扫雷
     printf("\n");
+    displayboard(show,ROW,COL);
     findmine(mine,show,ROW,COL);
-    // displayboard(show,ROW,COL);
 }
 
 //分隔符函数

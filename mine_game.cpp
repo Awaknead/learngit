@@ -64,6 +64,28 @@ int get_mine_count(char mine[ROWS][COLS],int x,int y)
             mine[x-1][y+1]+
             mine[x-1][y]-8*'0';
 }
+// 递归-辐射坐标圈
+void diguishow(char mine[ROWS][COLS],char show[ROWS][COLS],int x,int y,int row,int col)
+{
+    if(show[x][y] == ' ');
+    //    return ;
+    else if(get_mine_count(mine,x,y) != 0)
+        show[x][y] = get_mine_count(mine,x,y)+'0';
+        // return ;
+    else
+    {
+        show[x][y] = ' ';
+        diguishow(mine,show,x-1,y-1,ROW,COL);
+        diguishow(mine,show,x,y-1,ROW,COL);
+        diguishow(mine,show,x+1,y-1,ROW,COL);
+        diguishow(mine,show,x+1,y,ROW,COL);
+        diguishow(mine,show,x+1,y+1,ROW,COL);
+        diguishow(mine,show,x,y+1,ROW,COL);
+        diguishow(mine,show,x-1,y+1,ROW,COL);
+        diguishow(mine,show,x-1,y,ROW,COL);
+    }
+
+}
 // 排雷
 void findmine(char mine[ROWS][COLS],char show[ROWS][COLS],int row,int col)
 {
@@ -71,7 +93,7 @@ void findmine(char mine[ROWS][COLS],char show[ROWS][COLS],int row,int col)
     int y=0;
     int count=0;
     int win=0;
-    while(win<row*col-SET_MINE)
+    do
     {
         // 用户输入坐标
         printf("please enter coordinate .>");
@@ -89,17 +111,27 @@ void findmine(char mine[ROWS][COLS],char show[ROWS][COLS],int row,int col)
             // 没踩到雷，显示该坐标周围雷的个数
             else
             {
-                count=get_mine_count(mine,x,y);
-                show[x][y]=count+'0';
+                diguishow(mine,show,x,y,ROW,COL);//辐射坐标圈
                 displayboard(show,ROW,COL);//排雷图
-                displayboard(mine,ROW,COL);//布雷图
-                win++;
+                //displayboard(mine,ROW,COL);//布雷图
             }
         }
         else //坐标非法
             printf("lllegal coordinate,re-return.\n ");
-    }
-    if(win == row*col-SET_MINE)
+        //判断没翻的数还有多少个返回while循环
+        win=0;
+        for(int i=1;i<=row;i++)
+        {
+            for(int j=1;j<=col;j++)
+            {
+                if(show[i][j] == '*')
+                  win++;
+            }
+        }
+        printf("\n---%d---\n",win);
+    }while(win > SET_MINE);//没翻的大于雷的数量
+
+    if(win == SET_MINE)//判断while循环等于雷的数量
     {
         printf("congratulations on winning.\n");
         displayboard(mine,row,col);

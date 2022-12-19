@@ -19,7 +19,7 @@
 #define COL 9 //工作区列
 #define ROWS ROW+2 //游戏框架行
 #define COLS COL+2 //游戏框架列
-#define SET_MINE 80 //设置雷的个数
+#define SET_MINE 10 //设置雷的个数
 
 
 // 目录函数
@@ -40,3 +40,5 @@ void setmine(char board[ROWS][COLS],int row,int col);
 void findmine(char mine[ROWS][COLS],char show[ROWS][COLS],int row,int col);
 // 坐标周围雷的个数，返回个数
 int get_mine_count(char mine[ROWS][COLS],int x,int y);
+// 递归-辐射坐标圈
+void diguishow(char mine[ROWS][COLS],char show[ROWS][COLS],int x,int y,int row,int col);
